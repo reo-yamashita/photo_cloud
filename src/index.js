@@ -1,15 +1,31 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import "./main.css";
+import App from "./App";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 //import reportWebVitals from './reportWebVitals';
 
+import { store } from "./store";
+import { firebase } from "./firebase/config";
+import { Provider } from "react-redux";
+import { ReactReduxFirebaseProvider } from "react-redux-firebase";
+import { createFirestoreInstance } from "redux-firestore";
+
+const reduxConfig = {
+  firebase,
+  config: { attachAuthIsReady: true },
+  dispatch: store.dispatch,
+  createFirestoreInstance,
+};
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+  <Provider store={store}>
+    <ReactReduxFirebaseProvider {...reduxConfig}>
+      <App />
+    </ReactReduxFirebaseProvider>
+  </Provider>,
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

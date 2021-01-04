@@ -1,0 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap");
+
+:root {
+  --primary: #efb6b2;
+  --secondary: #4e4e4e;
+  --error: #ff4a4a;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #fff1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(182, 216, 255);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(203, 231, 253);
+}
+
+body {
+  font-family: "Noto Serif";
+  color: var(--secondary);
+}
+ul {
+  list-style: none;
+}

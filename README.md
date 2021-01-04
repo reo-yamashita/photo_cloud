@@ -1,2 +1,1 @@
-# CRA_pwa_template
-This is cra pwa template with tailwindcss.
+This app was bootstrapped with Create React App.

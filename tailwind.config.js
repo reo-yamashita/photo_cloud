@@ -1,4 +1,4 @@
-const colors = require('tailwindcss/colors')
+const colors = require("tailwindcss/colors");
 
 module.exports = {
   purge: [],
@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     colors: {
       white: colors.white,
-      black:colors.black,
+      black: colors.black,
       blueGray: colors.blueGray,
       coolGray: colors.coolGray,
       gray: colors.gray,
@@ -19,7 +19,7 @@ module.exports = {
       lime: colors.lime,
       green: colors.green,
       emerald: colors.emerald,
-      teal:colors.teal,
+      teal: colors.teal,
       cyan: colors.cyan,
       lightBlue: colors.lightBlue,
       blue: colors.blue,
@@ -33,7 +33,33 @@ module.exports = {
     extend: {},
   },
   variants: {
+    animation: ["responsive", "motion-safe", "motion-reduce"],
     extend: {},
   },
-  plugins: [],
-}
+  plugins: [
+    function ({ addUtilities }) {
+      const newUtilities = {
+        ".text-shadow": {
+          textShadow: "0px 2px 3px darkgrey",
+        },
+        ".text-shadow-md": {
+          textShadow: "0px 3px 3px darkgrey",
+        },
+        ".text-shadow-lg": {
+          textShadow: "0px 5px 3px darkgrey",
+        },
+        ".text-shadow-xl": {
+          textShadow: "0px 7px 3px darkgrey",
+        },
+        ".text-shadow-2xl": {
+          textShadow: "0px 10px 3px darkgrey",
+        },
+        ".text-shadow-none": {
+          textShadow: "none",
+        },
+      };
+
+      addUtilities(newUtilities);
+    },
+  ],
+};
