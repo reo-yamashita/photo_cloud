@@ -10137,9 +10137,9 @@ react-photo-gallery@^8.0.0:
     resize-observer-polyfill "^1.5.0"
 
 react-redux-firebase@^3.8.1:
-  version "3.8.1"
-  resolved "https://registry.yarnpkg.com/react-redux-firebase/-/react-redux-firebase-3.8.1.tgz#7ab90338f11a499d914f9d1223a7a074decc8bb8"
-  integrity sha512-lMRZtylHfqkcBm2UscHpmBu9+oybU1OWtvjt1bPKuB1Y1Inm6fgJMN/yDcKZG5oY28nKYgx/DrESUI+e8e3W0Q==
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/react-redux-firebase/-/react-redux-firebase-3.9.0.tgz#57f4face201d63139d666288c58a0c06f3083cb1"
+  integrity sha512-sHzk1sMe1VFhHc99TdNsLJX4mF6qTRtFApSS+AINkdw5inVxD/8oc21pbp8NnD6fmrOjVsGxyBDkQ+44iUs6nA==
   dependencies:
     hoist-non-react-statics "^3.3.2"
     lodash "^4.17.19"

@@ -1,45 +1,35 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectPhoto } from "../store/reducers/photoReducer";
+import { selectFlagToggle } from "../store/reducers/photoReducer";
 import { motion } from "framer-motion";
 
 const PhotoPanel = ({ doc }) => {
   const dispatch = useDispatch();
+
   const selectMode = useSelector((state) => state.photoSelect.selectMode);
+  const select_flag = useSelector(
+    (state) => state.firestore.ordered.images.filter((img) => img.id === doc.id)[0].selected
+  );
 
   const [circle, setCircle] = useState(false);
-  const [flag, setFlag] = useState(false);
 
-  const isFirstRender = useRef(false);
-  useEffect(() => {
-    setFlag(false);
-    isFirstRender.current = true;
-  }, [selectMode]);
-
-  const modalHandler = useCallback(() => dispatch({ type: "MODAL_OPEN", doc: doc }), [
-    dispatch,
-    doc,
-  ]);
-
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-    } else {
-      if (selectMode) {
-        dispatch(selectPhoto(doc, flag));
-      }
-    }
-  }, [selectMode, flag, dispatch, doc]);
+  const modalHandler = useCallback(
+    (e) => {
+      e.stopPropagation();
+      dispatch({ type: "MODAL_OPEN", doc: doc });
+    },
+    [dispatch, doc]
+  );
 
   return (
     <div
       className={`relative  overflow-hidden h-0 ${
-        flag && selectMode ? "border-indigo-400 border-opacity-75" : "border-white"
+        select_flag && selectMode ? "border-indigo-400 border-opacity-75" : "border-white"
       }  ${selectMode ? "border-blue-200" : ""} border-4`}
       style={{ padding: "50% 0" }}
       onMouseEnter={() => setCircle(true)}
       onMouseLeave={() => setCircle(false)}
-      onClick={() => (selectMode ? setFlag(!flag) : null)}
+      onClick={() => (selectMode ? dispatch(selectFlagToggle(doc, !select_flag)) : null)}
     >
       <motion.img
         src={doc.src}

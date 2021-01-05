@@ -1,15 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useFirestoreConnect } from "react-redux-firebase";
 import { motion } from "framer-motion";
 import PhotoPanel from "./photoPanel";
 
-import { selectModeToggle } from "../store/reducers/photoReducer";
+import { selectALLFlagToggle, selectModeToggle } from "../store/reducers/photoReducer";
 import { DeleteFiles } from "../store/reducers/modalReducer.js";
 
 const ImageField = () => {
   const dispatch = useDispatch();
+
+  const docs = useSelector((state) => state.firestore.ordered.images);
+  const selectMode = useSelector((state) => state.photoSelect.selectMode);
+  const selectphotos = useSelector((state) => state.photoSelect.selection);
+  const total_size = docs && docs.reduce((acc, cur) => acc + cur.size, 0);
 
   useFirestoreConnect([
     {
@@ -17,11 +22,6 @@ const ImageField = () => {
       orderBy: ["createdAt", "desc"],
     },
   ]);
-  const docs = useSelector((state) => state.firestore.ordered.images);
-  const selectMode = useSelector((state) => state.photoSelect.selectMode);
-  const selectphotos = useSelector((state) => state.photoSelect.selection);
-
-  const total_size = docs && docs.reduce((acc, cur) => acc + cur.size, 0);
 
   return (
     <section className="max-w-4xl mx-auto">
@@ -35,7 +35,7 @@ const ImageField = () => {
         >
           {selectMode ? "select" : "view"}
         </p>
-        <p className="px-3 py-1 rounded-xl bg-blue-200 hover:bg-blue-300 text-white tracking-wide text-xs select-none  transition-colors">
+        <p className="px-3 py-1 rounded-xl bg-teal-300 text-white tracking-wide text-xs select-none  transition-colors">
           {total_size ? (total_size / 1000000).toFixed(1) : 0} MB
         </p>
         {Object.keys(selectphotos).length > 0 && selectMode && (
@@ -44,6 +44,16 @@ const ImageField = () => {
             onDoubleClick={() => dispatch(DeleteFiles(Object.values(selectphotos)))}
           >
             delete files
+          </p>
+        )}
+        {selectMode && (
+          <p
+            className={`px-3 py-1 rounded-xl text-white tracking-wide text-xs select-none cursor-pointer transition-colors  bg-blue-200 hover:bg-blue-300`}
+            onClick={() => {
+              dispatch(selectALLFlagToggle(docs, false));
+            }}
+          >
+            Reset Select
           </p>
         )}
       </div>

@@ -32,7 +32,7 @@ const useStorage = (file) => {
         await storageRef.getMetadata().then((snap) => {
           //  console.log(snap);
           const size = snap.size;
-          collectionRef.add({ name, src, createdAt, size });
+          collectionRef.add({ name, src, createdAt, size, selected: false });
         });
         setSrc(src);
       }

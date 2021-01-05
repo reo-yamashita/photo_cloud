@@ -38,10 +38,6 @@ export const DeleteFiles = (files) => {
           collectionRef
             .doc(file.id)
             .delete()
-            .then(() => {
-              console.log("File Delete");
-              dispatch({ type: "SELECT_INITIAL" });
-            })
             .catch((err) => console.log(err));
         })
         .catch((err) => console.log(err));

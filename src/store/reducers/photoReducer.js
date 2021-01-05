@@ -1,20 +1,72 @@
-export const selectPhoto = (file, flag) => {
-  return (dispatch, getState) => {
-    let collect = {
-      ...getState().photoSelect.selection,
-      [file.id]: { ...file, select: flag },
-    };
-    dispatch({
-      type: "SELECT_PHOTO",
-      selection: { ...Object.filter(collect, (parcel) => parcel.select) },
-    });
-  };
-};
-
 export const selectModeToggle = () => {
   return (dispatch, getState) => {
     dispatch({
       type: "SLECT_MODE",
+    });
+  };
+};
+
+export const selectFlagToggle = (doc, selected) => {
+  return (dispatch, getState, getFirebase) => {
+    const firestore = getFirebase().firestore();
+    let collect = {
+      ...getState().photoSelect.selection,
+      [doc.id]: { ...doc, selected },
+    };
+
+    console.log("reo");
+    firestore
+      .collection("images")
+      .doc(doc.id)
+      .update({
+        ...doc,
+        selected,
+      })
+      .then(() => {
+        dispatch({
+          type: "SELECT_PHOTO",
+          selection: { ...Object.filter(collect, (parcel) => parcel.selected) },
+        });
+        console.log("Select toggled");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+export const selectALLFlagToggle = (docs, selected) => {
+  return (dispatch, getState, getFirebase) => {
+    const firestore = getFirebase().firestore();
+
+    docs.forEach((doc) => {
+      if (doc.selected) {
+        firestore
+          .collection("images")
+          .doc(doc.id)
+          .update({
+            ...doc,
+            selected,
+          })
+          .then(() => {
+            dispatch({
+              type: "SELECT_PHOTO",
+              selection: {
+                ...Object.filter(
+                  {
+                    ...getState().photoSelect.selection,
+                    [doc.id]: { ...doc, selected },
+                  },
+                  (parcel) => parcel.selected
+                ),
+              },
+            });
+            console.log("Select toggled");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     });
   };
 };
@@ -35,7 +87,7 @@ Object.filter = (obj, predicate) =>
 const photoReducer = (state = initState, action) => {
   switch (action.type) {
     case "SLECT_MODE":
-      console.log("Photo collection");
+      console.log("Select Mode");
       return {
         ...state,
         selectMode: !state.selectMode,
