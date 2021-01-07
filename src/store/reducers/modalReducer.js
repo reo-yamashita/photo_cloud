@@ -8,10 +8,19 @@ export const DeletePhoto = (doc) => {
     const delete_Storage = storage_Ref.delete();
     const delete_Doc = collection_Ref.doc(doc.id).delete();
 
+    let collect = {
+      ...getState().photoSelect.collection,
+      [doc.id]: { ...doc, isSelected: false },
+    };
+
     Promise.all([delete_Storage, delete_Doc])
       .then(() => {
-        console.log("File Delete");
+        dispatch({
+          type: "SELECT_PHOTO",
+          collection: { ...Object.filter(collect, (parcel) => parcel.isSelected) },
+        });
         dispatch({ type: "MODAL_CLOSE" });
+        console.log("File Delete");
       })
       .catch((err) => console.log(err.message));
   };
