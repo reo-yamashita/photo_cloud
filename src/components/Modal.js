@@ -16,6 +16,8 @@ const Modal = () => {
   const modal_doc = useSelector((state) => state.modal.selected_doc);
   const toggle_status = useSelector((state) => state.modal.modalToggleStatus);
 
+  const selectMode = useSelector((state) => state.photoSelect.selectMode);
+
   const { ref, setFlag, flag } = useReference();
   const [circle, setCircle] = useState(false);
 
@@ -61,24 +63,26 @@ const Modal = () => {
           </div>
           <div className="max-w-lg mx-auto px-2 flex justify-end items-center space-x-4">
             {/* <GetAppIcon onClick={() => ImgDownloadHnadler()} className="cursor-pointer" /> */}
-            <div className="relative" ref={ref}>
-              <Delete
-                onClick={() => {
-                  setFlag(!flag);
-                }}
-                className="cursor-pointer relative"
-              />
-              {flag && (
-                <div className="absolute z-50 -translate-x-full transform px-2 py-1 bg-white opacity-70 text-sm rounded-md">
-                  <button
-                    onDoubleClick={() => dispatch(DeletePhoto(modal_doc))}
-                    className="focus:outline-none"
-                  >
-                    Delete
-                  </button>
-                </div>
-              )}
-            </div>
+            {!selectMode && (
+              <div className="relative" ref={ref}>
+                <Delete
+                  onClick={() => {
+                    setFlag(!flag);
+                  }}
+                  className="cursor-pointer relative"
+                />
+                {flag && (
+                  <div className="absolute z-50 -translate-x-full transform px-2 py-1 bg-white opacity-70 text-sm rounded-md">
+                    <button
+                      onDoubleClick={() => dispatch(DeletePhoto(modal_doc))}
+                      className="focus:outline-none"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
             <HighlightOffIcon className="cursor-pointer" onClick={modalCloseHandler} />
           </div>
         </nav>

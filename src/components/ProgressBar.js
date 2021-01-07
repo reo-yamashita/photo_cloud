@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import useStorage from "../hooks/useStorage";
 
 const Progressbar = ({ file, setFile }) => {
+  // eslint-disable-next-line
   const { src, progress, error } = useStorage(file);
 
   useEffect(() => {
