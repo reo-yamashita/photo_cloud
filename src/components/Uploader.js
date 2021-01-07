@@ -10,6 +10,7 @@ const Uploader = () => {
   };
 
   const [file, setFile] = useState(null);
+  // eslint-disable-next-line
   const [error, setError] = useState(null);
 
   const types = ["image/png", "image/jpeg"];
@@ -26,7 +27,7 @@ const Uploader = () => {
   };
 
   return (
-    <section className="UPLOAD">
+    <section>
       <div className="h-2 w-full bg-orange-50">
         {file && <ProgressBar file={file} setFile={setFile} />}
       </div>

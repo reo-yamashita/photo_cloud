@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "photo cloud",
+  "name": "Photo Cloud",
   "icons": [
     {
       "src": "near_string_.png",
@@ -10,6 +10,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#CDEFFE",
+  "background_color": "#CDEFFE"
 }

@@ -30,9 +30,8 @@ const useStorage = (file) => {
         const createdAt = timestamp();
 
         await storageRef.getMetadata().then((snap) => {
-          //  console.log(snap);
           const size = snap.size;
-          collectionRef.add({ name, src, createdAt, size, selected: false });
+          collectionRef.add({ name, src, createdAt, size });
         });
         setSrc(src);
       }

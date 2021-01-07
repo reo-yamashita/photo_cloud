@@ -28,17 +28,7 @@ const Modal = () => {
     return () => {
       document.body.style.overflow = "unset";
     };
-  });
-
-  // const ImgDownloadHnadler = () => {
-  //   const xhr = new XMLHttpRequest();
-  //   xhr.responseType = "blob";
-  //   xhr.onload = (e) => {
-  //     let blob = xhr.response;
-  //   };
-  //   xhr.open("GET", modal_doc.src);
-  //   xhr.send();
-  // };
+  }, [toggle_status]);
 
   return (
     <div className="fixed top-0 w-full h-screen bg-warmGray-800  mx-auto  overflow-y-auto flex flex-col items-center modal_wrapper">
@@ -94,7 +84,7 @@ const Modal = () => {
         </nav>
       </div>
       <div className="max-w-2xl mx-auto h-auto pt-8 mb-8">
-        <img src={modal_doc.src} alt="" className="object-contain block" />
+        <img src={modal_doc.src} alt={modal_doc.name} className="object-contain block" />
       </div>
     </div>
   );

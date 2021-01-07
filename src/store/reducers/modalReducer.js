@@ -1,47 +1,47 @@
-export const DeletePhoto = (file) => {
-  // delete one file
+export const DeletePhoto = (doc) => {
+  // delete a file
   return (dispatch, getState, getFirebase) => {
-    const desertRef = getFirebase().storage().ref().child(file.name);
+    const storage_Ref = getFirebase().storage().ref().child(doc.name);
     const firestore = getFirebase().firestore();
 
-    const collectionRef = firestore.collection("images");
+    const collection_Ref = firestore.collection("images");
+    const delete_Storage = storage_Ref.delete();
+    const delete_Doc = collection_Ref.doc(doc.id).delete();
 
-    desertRef
-      .delete()
+    Promise.all([delete_Storage, delete_Doc])
       .then(() => {
-        collectionRef
-          .doc(file.id)
-          .delete()
-          .then(() => {
-            console.log("File Delete");
-          })
-          .then(() => dispatch({ type: "MODAL_CLOSE" }))
-          .catch((err) => console.log(err));
+        console.log("File Delete");
+        dispatch({ type: "MODAL_CLOSE" });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err.message));
   };
 };
 
-export const DeleteFiles = (files) => {
+export const DeletePhotos = (files) => {
   // delete mutiple files
   return (dispatch, getState, getFirebase) => {
-    const fileRef = getFirebase().storage().ref();
+    const storage_Ref = getFirebase().storage().ref();
     const firestore = getFirebase().firestore();
-    const collectionRef = firestore.collection("images");
+    const collection_Ref = firestore.collection("images");
 
-    files.forEach((file) => {
-      const desertRef = fileRef.child(file.name);
-
-      desertRef
-        .delete()
-        .then(() => {
-          collectionRef
-            .doc(file.id)
-            .delete()
-            .catch((err) => console.log(err));
-        })
-        .catch((err) => console.log(err));
-    });
+    Promise.all(
+      files.map(async (file) => {
+        const child_storage_Ref = storage_Ref.child(file.name);
+        const delete_Storage = child_storage_Ref.delete();
+        const delete_Doc = collection_Ref.doc(file.id).delete();
+        await Promise.all([delete_Storage, delete_Doc]);
+      })
+    )
+      .then(() => {
+        dispatch({
+          type: "SELECT_PHOTO",
+          collection: {},
+        });
+        console.log("All File Deleted");
+      })
+      .catch((error) => {
+        console.error(error.message);
+      });
   };
 };
 

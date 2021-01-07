@@ -1,81 +1,4 @@
-export const selectModeToggle = () => {
-  return (dispatch, getState) => {
-    dispatch({
-      type: "SLECT_MODE",
-    });
-  };
-};
-
-export const selectFlagToggle = (doc, selected) => {
-  return (dispatch, getState, getFirebase) => {
-    const firestore = getFirebase().firestore();
-    let collect = {
-      ...getState().photoSelect.selection,
-      [doc.id]: { ...doc, selected },
-    };
-
-    console.log("reo");
-    firestore
-      .collection("images")
-      .doc(doc.id)
-      .update({
-        ...doc,
-        selected,
-      })
-      .then(() => {
-        dispatch({
-          type: "SELECT_PHOTO",
-          selection: { ...Object.filter(collect, (parcel) => parcel.selected) },
-        });
-        console.log("Select toggled");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-};
-
-export const selectALLFlagToggle = (docs, selected) => {
-  return (dispatch, getState, getFirebase) => {
-    const firestore = getFirebase().firestore();
-
-    docs.forEach((doc) => {
-      if (doc.selected) {
-        firestore
-          .collection("images")
-          .doc(doc.id)
-          .update({
-            ...doc,
-            selected,
-          })
-          .then(() => {
-            dispatch({
-              type: "SELECT_PHOTO",
-              selection: {
-                ...Object.filter(
-                  {
-                    ...getState().photoSelect.selection,
-                    [doc.id]: { ...doc, selected },
-                  },
-                  (parcel) => parcel.selected
-                ),
-              },
-            });
-            console.log("Select toggled");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    });
-  };
-};
-
-const initState = {
-  selectMode: false,
-  selection: {},
-};
-
+// original expression defined
 Object.filter = (obj, predicate) =>
   Object.keys(obj)
     .filter((key) => predicate(obj[key]))
@@ -83,6 +6,47 @@ Object.filter = (obj, predicate) =>
       res[key] = obj[key];
       return res;
     }, {});
+
+export const selectModeToggle = () => {
+  return (dispatch) => {
+    dispatch({
+      type: "SLECT_MODE",
+    });
+  };
+};
+
+export const toggle_isSelected = (doc, isSelected) => {
+  return (dispatch, getState) => {
+    let collect = {
+      ...getState().photoSelect.collection,
+      [doc.id]: { ...doc, isSelected },
+    };
+
+    dispatch({
+      type: "SELECT_PHOTO",
+      collection: { ...Object.filter(collect, (parcel) => parcel.isSelected) },
+    });
+  };
+};
+
+export const toggle_ALL_isSelected = (docs, isSelected) => {
+  return (dispatch, getState) => {
+    let collect = {
+      ...getState().photoSelect.collection,
+      ...docs.reduce((acc, cur) => ({ ...acc, [cur.id]: { ...cur, isSelected } }), {}),
+    };
+
+    dispatch({
+      type: "SELECT_PHOTO",
+      collection: { ...Object.filter(collect, (parcel) => parcel.isSelected) },
+    });
+  };
+};
+
+const initState = {
+  selectMode: false,
+  collection: {},
+};
 
 const photoReducer = (state = initState, action) => {
   switch (action.type) {
@@ -94,17 +58,9 @@ const photoReducer = (state = initState, action) => {
       };
     case "SELECT_PHOTO":
       console.log("Select Photo");
-
       return {
         ...state,
-        selection: action.selection,
-      };
-    case "SELECT_INITIAL":
-      console.log("Selection Initialized");
-      return {
-        ...state,
-        selectMode: false,
-        selection: {},
+        collection: action.collection,
       };
     default:
       return state;
